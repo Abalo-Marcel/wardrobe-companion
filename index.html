@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4efe7">
+  <meta name="application-name" content="Wardrobe Companion">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Wardrobe Companion">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Wardrobe Companion</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/icon.svg" sizes="any" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icon-192.svg">
+  <link rel="stylesheet" href="styles.css?v=10">
+  <script defer src="app.js?v=21"></script>
+</head>
+<body>
+  <div class="app-shell" data-ui-mode="new">
+    <header class="app-header">
+      <button class="brand-button" type="button" data-screen-target="home" aria-label="Accueil Wardrobe Companion"><span class="brand-mark" aria-hidden="true">◇</span><span>Wardrobe Companion</span></button>
+      <button class="icon-button" type="button" data-action="toggle-menu" aria-label="Ouvrir le menu" aria-expanded="false">⋮</button>
+      <div class="app-menu" data-app-menu hidden><button type="button" data-screen-target="home">Accueil</button><button type="button" data-screen-target="settings">Paramètres</button><button type="button" data-action="toggle-ui-mode">Passer à l’affichage classique</button></div>
+    </header>
+    <main>
+      <section id="home" class="home-screen app-screen" data-screen="home">
+        <div class="home-intro"><p class="eyebrow">Votre espace</p><h1>Votre garde-robe, en un regard.</h1><p class="home-copy">Organisez ce que vous possédez et ce que vous cherchez, simplement.</p></div>
+        <div class="home-stack" aria-label="Sections principales">
+          <button class="stack-card stack-card-dashboard" type="button" data-screen-target="dashboard"><span class="stack-card-icon">◌</span><span><strong>Dashboard</strong><small>Vue d’ensemble et budget</small></span><span class="stack-arrow">↗</span></button>
+          <button class="stack-card stack-card-checklist" type="button" data-screen-target="checklist"><span class="stack-card-icon">✓</span><span><strong>Checklist</strong><small>Les pièces à acheter</small></span><span class="stack-arrow">↗</span></button>
+          <button class="stack-card stack-card-purchased" type="button" data-screen-target="purchased"><span class="stack-card-icon">✓</span><span><strong>Articles achetés</strong><small>À intégrer au dressing</small></span><span class="stack-arrow">↗</span></button>
+          <button class="stack-card stack-card-wardrobe" type="button" data-screen-target="wardrobe"><span class="stack-card-icon">▱</span><span><strong>Mes vêtements</strong><small>Ce que vous possédez</small></span><span class="stack-arrow">↗</span></button>
+          <button class="stack-card stack-card-wishlist" type="button" data-screen-target="wishlist"><span class="stack-card-icon">♡</span><span><strong>Wishlist</strong><small>Les prochaines envies</small></span><span class="stack-arrow">↗</span></button>
+          <button class="stack-card stack-card-notes" type="button" data-screen-target="notes"><span class="stack-card-icon">〆</span><span><strong>Notes</strong><small>Idées et ajustements</small></span><span class="stack-arrow">↗</span></button>
+          <button class="stack-card stack-card-settings" type="button" data-screen-target="settings"><span class="stack-card-icon">⚙</span><span><strong>Paramètres</strong><small>Thème et données</small></span><span class="stack-arrow">↗</span></button>
+        </div>
+      </section>
+
+      <section id="dashboard" class="section app-screen" data-screen="dashboard" hidden><div class="section-header"><button class="back-button" type="button" data-screen-target="home">← <span>Accueil</span></button><div class="section-heading-copy"><p class="eyebrow">Vue d’ensemble</p><h2>Dashboard</h2></div></div><div class="dashboard-summary"><div class="summary-progress"><div><span>Achats</span><strong data-metric="progress-label">0%</strong></div><div class="progress-track"><div class="progress-fill" data-metric="progress-bar"></div></div></div><div class="metric-grid"><article class="metric-card"><span>Budget prévu</span><strong data-metric="budget-planned">0 €</strong></article><article class="metric-card"><span>Dépensé</span><strong data-metric="budget-spent">0 €</strong></article><article class="metric-card"><span>Restant</span><strong data-metric="budget-remaining">0 €</strong></article><article class="metric-card"><span>Checklist</span><strong data-metric="checklist-count">0</strong></article><article class="metric-card"><span>Articles achetés</span><strong data-metric="purchased-count">0</strong></article><article class="metric-card"><span>Vêtements</span><strong data-metric="wardrobe-count-large">0</strong></article><article class="metric-card"><span>Wishlist</span><strong data-metric="wishlist-count">0</strong></article></div></div></section>
+
+      <section id="checklist" class="section app-screen" data-screen="checklist" hidden><div class="section-header"><button class="back-button" type="button" data-screen-target="home">← <span>Accueil</span></button><div class="section-heading-copy"><p class="eyebrow">À acheter</p><h2>Checklist</h2></div><div class="section-actions"><button class="icon-button" type="button" data-search-target="checklist" aria-label="Rechercher dans la checklist">⌕</button><button class="add-button" type="button" data-open-create="checklist" aria-label="Ajouter à la checklist">+</button></div></div><div class="section-search" data-search-box="checklist" hidden><input type="search" data-section-search="checklist" placeholder="Rechercher..." aria-label="Rechercher dans la checklist"><button type="button" data-clear-search="checklist" aria-label="Effacer la recherche">×</button></div><div id="checklist-content" class="stack-list"></div></section>
+
+      <section id="purchased" class="section app-screen" data-screen="purchased" hidden><div class="section-header"><button class="back-button" type="button" data-screen-target="home">← <span>Accueil</span></button><div class="section-heading-copy"><p class="eyebrow">Achetés récemment</p><h2>Articles achetés</h2></div><div class="section-actions"><button class="icon-button" type="button" data-search-target="purchased" aria-label="Rechercher dans les articles achetés">⌕</button></div></div><div class="section-search" data-search-box="purchased" hidden><input type="search" data-section-search="purchased" placeholder="Rechercher..." aria-label="Rechercher dans les articles achetés"><button type="button" data-clear-search="purchased" aria-label="Effacer la recherche">×</button></div><div id="purchased-content" class="stack-list"></div></section>
+
+      <section id="wardrobe" class="section app-screen" data-screen="wardrobe" hidden><div class="section-header"><button class="back-button" type="button" data-screen-target="home">← <span>Accueil</span></button><div class="section-heading-copy"><p class="eyebrow">Mon catalogue</p><h2>Mes vêtements</h2></div><div class="section-actions"><button class="icon-button" type="button" data-search-target="wardrobe" aria-label="Rechercher dans mes vêtements">⌕</button><button class="add-button" type="button" data-open-create="wardrobe" aria-label="Ajouter un vêtement">+</button></div></div><div class="section-search" data-search-box="wardrobe" hidden><input type="search" data-section-search="wardrobe" placeholder="Rechercher..." aria-label="Rechercher dans mes vêtements"><button type="button" data-clear-search="wardrobe" aria-label="Effacer la recherche">×</button></div><div id="wardrobe-content" class="stack-list wardrobe-list"></div></section>
+
+      <section id="wishlist" class="section app-screen" data-screen="wishlist" hidden><div class="section-header"><button class="back-button" type="button" data-screen-target="home">← <span>Accueil</span></button><div class="section-heading-copy"><p class="eyebrow">À garder en tête</p><h2>Wishlist</h2></div><div class="section-actions"><button class="icon-button" type="button" data-search-target="wishlist" aria-label="Rechercher dans la wishlist">⌕</button><button class="add-button" type="button" data-open-create="wishlist" aria-label="Ajouter à la wishlist">+</button></div></div><div class="section-search" data-search-box="wishlist" hidden><input type="search" data-section-search="wishlist" placeholder="Rechercher..." aria-label="Rechercher dans la wishlist"><button type="button" data-clear-search="wishlist" aria-label="Effacer la recherche">×</button></div><div id="wishlist-content" class="stack-list"></div></section>
+
+      <section id="notes" class="section app-screen" data-screen="notes" hidden><div class="section-header"><button class="back-button" type="button" data-screen-target="home">← <span>Accueil</span></button><div class="section-heading-copy"><p class="eyebrow">Espace libre</p><h2>Notes</h2></div></div><div class="notes-card"><textarea id="notes-field" rows="12" placeholder="Idées, listes et ajustements..."></textarea></div></section>
+
+      <section id="settings" class="section app-screen" data-screen="settings" hidden><div class="section-header"><button class="back-button" type="button" data-screen-target="home">← <span>Accueil</span></button><div class="section-heading-copy"><p class="eyebrow">Préférences</p><h2>Paramètres</h2></div></div><div class="settings-stack"><article class="setting-card"><div><strong>Apparence</strong><small>Choisir le thème</small></div><div id="theme-select" class="select-host"></div></article><article class="setting-card"><div><strong>Nettoyage des achats</strong><small>Supprimer automatiquement les articles achetés</small></div><div id="purchased-retention-select" class="select-host"></div></article><article class="setting-card"><div><strong>Données</strong><small>Exporter ou importer votre garde-robe</small></div><div class="settings-actions"><button type="button" id="export-button">Exporter</button><button type="button" id="import-button">Importer</button><input id="import-input" type="file" accept="application/json" hidden></div></article><article class="setting-card setting-danger"><div><strong>Réinitialiser</strong><small>Effacer les données locales</small></div><button type="button" id="reset-button" class="danger">Réinitialiser</button></article><article class="setting-card"><div><strong>Interface</strong><small>Afficher toutes les sections</small></div><button type="button" data-action="toggle-ui-mode">Passer à l’affichage classique</button></article></div></section>
+    </main>
+
+    <div id="editor-modal" class="modal-backdrop" hidden><section class="editor-modal" role="dialog" aria-modal="true" aria-labelledby="editor-title"><div class="modal-header"><div><p class="eyebrow" id="editor-kicker">Nouvel article</p><h2 id="editor-title">Ajouter</h2></div><button type="button" class="icon-button" data-close-modal aria-label="Fermer">×</button></div><form id="item-editor-form" class="editor-form"></form></section></div>
+    <div id="photo-lightbox" class="photo-lightbox" hidden><section class="photo-lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="photo-lightbox-caption"><button type="button" class="photo-lightbox-close" data-close-photo-lightbox aria-label="Fermer la photo">×</button><img id="photo-lightbox-image" src="" alt=""><p id="photo-lightbox-caption"></p></section></div>
+    <div id="app-toast" class="app-toast" role="status" aria-live="polite" hidden></div>
+  </div>
+</body>
+</html>
