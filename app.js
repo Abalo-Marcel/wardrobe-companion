@@ -316,7 +316,9 @@ const dom = {};
 let state = loadData();
 let activeSelectShell = null;
 let toastTimer = null;
+let toastHideTimer = null;
 let photoLightboxTrigger = null;
+let pendingDeletion = null;
 
 function createDefaultState() {
   return {
@@ -515,18 +517,40 @@ function saveData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-function showToast(message) {
+function hideToast() {
   const toast = document.getElementById("app-toast");
   if (!toast) return;
 
   window.clearTimeout(toastTimer);
-  toast.textContent = message;
+  window.clearTimeout(toastHideTimer);
+  toastTimer = null;
+  toast.classList.remove("is-visible");
+  toastHideTimer = window.setTimeout(() => {
+    toast.hidden = true;
+  }, 180);
+}
+
+function showToast(message, actionLabel = "", actionHandler = null, duration = 2200) {
+  const toast = document.getElementById("app-toast");
+  if (!toast) return;
+
+  window.clearTimeout(toastTimer);
+  window.clearTimeout(toastHideTimer);
+  const toastMessage = toast.querySelector(".app-toast-message");
+  const toastAction = toast.querySelector(".app-toast-action");
+  if (toastMessage) {
+    toastMessage.textContent = message;
+  } else {
+    toast.textContent = message;
+  }
+  if (toastAction) {
+    toastAction.textContent = actionLabel;
+    toastAction.hidden = !actionLabel;
+    toastAction.onclick = actionHandler;
+  }
   toast.hidden = false;
   requestAnimationFrame(() => toast.classList.add("is-visible"));
-  toastTimer = window.setTimeout(() => {
-    toast.classList.remove("is-visible");
-    window.setTimeout(() => { toast.hidden = true; }, 180);
-  }, 2200);
+  toastTimer = window.setTimeout(hideToast, duration);
 }
 
 function getActiveFilters() {
@@ -1369,6 +1393,51 @@ function removeItem(section, id) {
   updateDashboard();
 }
 
+function getDeletableCollection(section) {
+  if (section === "checklist") return state.stats.checklist;
+  if (section === "wardrobe") return state.wardrobe;
+  return null;
+}
+
+function requestItemDeletion(section, id) {
+  const collection = getDeletableCollection(section);
+  const index = collection?.findIndex((item) => item.id === id) ?? -1;
+  if (index < 0) return;
+
+  if (pendingDeletion) {
+    window.clearTimeout(pendingDeletion.timer);
+    pendingDeletion = null;
+  }
+
+  const [item] = collection.splice(index, 1);
+  pendingDeletion = { section, item, index, timer: null };
+  saveData();
+  if (section === "checklist") renderChecklist();
+  if (section === "wardrobe") renderWardrobe();
+  updateDashboard();
+  showToast(`« ${item.name} » supprimé`, "Annuler", undoLastDeletion, 5000);
+  pendingDeletion.timer = window.setTimeout(() => {
+    pendingDeletion = null;
+  }, 5000);
+}
+
+function undoLastDeletion() {
+  if (!pendingDeletion) return;
+
+  const { section, item, index, timer } = pendingDeletion;
+  window.clearTimeout(timer);
+  const collection = getDeletableCollection(section);
+  if (!collection) return;
+
+  collection.splice(Math.min(index, collection.length), 0, item);
+  pendingDeletion = null;
+  saveData();
+  if (section === "checklist") renderChecklist();
+  if (section === "wardrobe") renderWardrobe();
+  updateDashboard();
+  showToast("Suppression annulée");
+}
+
 function moveWishlistItemToWardrobe(id) {
   const index = state.wishlist.findIndex((item) => item.id === id);
   if (index === -1) return;
@@ -1698,6 +1767,7 @@ function renderChecklist() {
   container.innerHTML = items.map((item) => `
     <article class="item-card checklist-card" data-section="checklist" data-item-id="${item.id}">
       <label class="check-control" aria-label="${item.checked ? "Article acheté" : "Marquer comme acheté"}"><input type="checkbox" data-card-check ${item.checked ? "checked" : ""}><span></span></label>
+      <button class="card-trash-button" type="button" data-action="request-delete" aria-label="Supprimer ${escapeHtml(item.name)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 9v8m4-8v8m4-8v8M5 6h14m-9-3h4l1 3H9l1-3Zm-3 3 1 14h8l1-14"/></svg></button>
       ${renderPhotoPreview(item, false)}
       <button class="card-open-button" type="button" data-action="open-editor">
         <div class="item-head"><div class="item-title-wrap"><div class="item-title">${escapeHtml(item.name)}</div><div class="item-meta"><span>${escapeHtml(item.category || "Catégorie libre")}</span><span>${formatCurrency(item.budget)}</span><span>Taille : <strong>${escapeHtml(item.size || "à définir")}</strong></span></div></div><span class="card-chevron">↗</span></div>
@@ -1719,6 +1789,7 @@ function renderWardrobe() {
   }
   container.innerHTML = items.map((item) => `
     <article class="item-card" data-section="wardrobe" data-item-id="${item.id}">
+      <button class="card-trash-button" type="button" data-action="request-delete" aria-label="Supprimer ${escapeHtml(item.name)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 9v8m4-8v8m4-8v8M5 6h14m-9-3h4l1 3H9l1-3Zm-3 3 1 14h8l1-14"/></svg></button>
       ${renderPhotoPreview(item)}
       <button class="card-open-button" type="button" data-action="open-editor">
         <div class="item-head"><div class="item-title-wrap"><div class="item-title">${escapeHtml(item.name)}</div><div class="item-meta"><span>${escapeHtml(item.category || "Catégorie libre")}</span><span>${escapeHtml(item.color || "Couleur à définir")}</span><span>${escapeHtml(item.size || "Taille à définir")}</span><span>${escapeHtml(item.brand || "Marque à définir")}</span></div></div><span class="card-chevron">↗</span></div>
@@ -1990,6 +2061,7 @@ function handleClick(event) {
     if (image) openPhotoLightbox(image.currentSrc || image.src, image.alt);
     return;
   }
+  if (action === "request-delete") { requestItemDeletion(card.dataset.section, card.dataset.itemId); return; }
   if (action === "move-purchased-to-wardrobe") { movePurchasedItemToWardrobe(card.dataset.itemId); return; }
   if (action === "remove-purchased") { removePurchasedItem(card.dataset.itemId); return; }
   if (action === "open-editor") { openEditor(card.dataset.section, card.dataset.itemId); return; }
@@ -2091,6 +2163,8 @@ const AppBlocks = Object.freeze({
   actions: Object.freeze({
     updateItem,
     removeItem,
+    requestItemDeletion,
+    undoLastDeletion,
     moveWishlistItemToWardrobe,
     moveChecklistItemToPurchased,
     movePurchasedItemToWardrobe,

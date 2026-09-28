@@ -13,8 +13,8 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="assets/icon.svg" sizes="any" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/icon-192.svg">
-  <link rel="stylesheet" href="styles.css?v=10">
-  <script defer src="app.js?v=21"></script>
+  <link rel="stylesheet" href="styles.css?v=15">
+  <script defer src="app.js?v=22"></script>
 </head>
 <body>
   <div class="app-shell" data-ui-mode="new">
@@ -54,7 +54,7 @@
 
     <div id="editor-modal" class="modal-backdrop" hidden><section class="editor-modal" role="dialog" aria-modal="true" aria-labelledby="editor-title"><div class="modal-header"><div><p class="eyebrow" id="editor-kicker">Nouvel article</p><h2 id="editor-title">Ajouter</h2></div><button type="button" class="icon-button" data-close-modal aria-label="Fermer">×</button></div><form id="item-editor-form" class="editor-form"></form></section></div>
     <div id="photo-lightbox" class="photo-lightbox" hidden><section class="photo-lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="photo-lightbox-caption"><button type="button" class="photo-lightbox-close" data-close-photo-lightbox aria-label="Fermer la photo">×</button><img id="photo-lightbox-image" src="" alt=""><p id="photo-lightbox-caption"></p></section></div>
-    <div id="app-toast" class="app-toast" role="status" aria-live="polite" hidden></div>
+    <div id="app-toast" class="app-toast" role="status" aria-live="polite" hidden><span class="app-toast-message"></span><button id="app-toast-action" class="app-toast-action" type="button" hidden>Annuler</button></div>
   </div>
 </body>
 </html>

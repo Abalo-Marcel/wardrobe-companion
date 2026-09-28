@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "wardrobe-companion-cache-";
-const CACHE_NAME = `${CACHE_PREFIX}v10`;
+const CACHE_NAME = `${CACHE_PREFIX}v15`;
 const APP_ASSETS = [
   "./",
   "./index.html",
